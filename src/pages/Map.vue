@@ -1,18 +1,18 @@
 <!-- eslint-disable no-undef -->
 <script>
 import { computed, onMounted, onUpdated, ref } from "@vue/runtime-core";
-import { getLocation } from "./services/MapServices";
+import { getLocation } from "../services/MapServices";
 import { Loader } from "@googlemaps/js-api-loader";
 import {
   getSearchingData,
   getResultMessage,
-} from "./services/SearchingServices";
-import { GOOGLE_MAPS_API_KEY } from "../config/config";
+} from "../services/SearchingServices";
+import { GOOGLE_MAPS_API_KEY } from "../../config/config";
 import MapModal from "@/components/MapModal.vue";
 import SearchingItem from "@/components/SearchingItem.vue";
 
 export default {
-  name: "App",
+  name: "MapPage",
   components: {
     // eslint-disable-next-line vue/no-unused-components
     SearchingItem,
@@ -120,7 +120,7 @@ export default {
   <section class="map">
     <div class="searching-section">
       <div class="searching-component">
-        <img class="search-icon" src="./assets/icons/icon-search.svg" />
+        <img class="search-icon" src="../assets/icons/icon-search.svg" />
         <input type="text" v-model="inputSearchValue" placeholder="Search..." />
       </div>
       <div v-if="resultList.length > 0" class="searching-list-component">

@@ -3,17 +3,17 @@
     <!-- Modal content -->
     <div class="modal-content">
       <span class="close" @click="closeModal">&times;</span>
-      <p>Some text in the Modal..</p>
+      <p>{{item.name}}</p>
     </div>
   </div>
 </template>
 <script>
 export default {
   name: "MapModal",
-  
+  props: ['item'],
   methods: {
     closeModal() {
-      this.$emit('created');
+      this.$emit('closed-modal');
     }
   }
 };
