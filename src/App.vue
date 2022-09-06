@@ -19,9 +19,9 @@
           </li>
         </div>
       </div>
-      <div v-if="showNotFoundMessage" class="searching-not-found-message">
+      <div v-if="showNotFoundMessage" class="searching-not-found-component">
         <img v-bind:src="imgURL" />
-        <p>{{ resultMessage }}</p>
+        <p class="searching-not-found-message">{{ resultMessage }}</p>
       </div>
     </div>
     <div ref="mapDiv" style="width: 100%; height: 98vh" />
@@ -44,6 +44,7 @@ import {
 import { GOOGLE_MAPS_API_KEY } from "../config/config";
 import MapModal from "@/components/MapModal.vue";
 import SearchingItem from "@/components/SearchingItem.vue";
+import {NO_FOUND_IMAGE_URL, SVG_PIN_PATH} from "./utils/constants"
 
 export default {
   name: "App",
@@ -63,7 +64,7 @@ export default {
     const itemDataSelected = ref({});
     const showNotFoundMessage = ref(false);
     const imgURL = ref(
-      "https://t4.ftcdn.net/jpg/01/68/08/09/240_F_168080987_nsGI5ILn8pBb42thQxdJNb4G7dXNjn5M.jpg"
+      NO_FOUND_IMAGE_URL
     );
 
     const { coords } = getLocation();
@@ -75,7 +76,7 @@ export default {
     onMounted(async () => {
       await loader.load();
       const svgMarker = {
-        path: "M5.49 0A5.496 5.496 0 0 0 0 5.49c0 2.08 1.412 4.261 2.596 5.724.97 1.197 2.54 2.768 2.886 2.797l.051.003c.37 0 2.002-1.69 2.88-2.786 1.17-1.461 2.567-3.644 2.567-5.738A5.496 5.496 0 0 0 5.49 0zm0 8.546a3.147 3.147 0 1 1-.001-6.293 3.147 3.147 0 0 1 0 6.293z",
+        path: SVG_PIN_PATH,
         fillColor: "rgb(68, 127, 239)",
         fillOpacity: 2,
         strokeWeight: 0,
@@ -146,6 +147,23 @@ export default {
 };
 </script>
 <style>
+html {
+  height: 100%;
+}
+li {
+  list-style-type: none;
+}
+input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  padding-left: 15px;
+}
+b {
+  font-family: Arial, Helvetica, sans-serif;
+}
 .map {
   width: 100%;
   height: 98%;
@@ -161,22 +179,9 @@ export default {
   color: #ffffff;
   font-weight: bold;
 }
-li {
-  list-style-type: none;
-}
 .search-icon {
   filter: invert(45%) sepia(100%) saturate(0%) hue-rotate(288deg)
     brightness(102%) contrast(102%);
-}
-input {
-  border: none;
-  outline: none;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  padding-left: 15px;
-}
-b {
-  font-family: Arial, Helvetica, sans-serif;
 }
 .searching-component {
   width: 400px;
@@ -195,8 +200,7 @@ b {
   margin: 10px;
   color: black;
 }
-
-.searching-not-found-message {
+.searching-not-found-component {
   width: 420px;
   height: 300px;
   background: #ffffff;
@@ -207,7 +211,7 @@ b {
   justify-content: center;
   border-radius: 5px;
 }
-p {
+.searching-not-found-message {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20px;
 }
@@ -232,8 +236,5 @@ p {
 }
 .search-item:hover {
   background: rgb(236, 241, 249);
-}
-html {
-  height: 100%;
 }
 </style>
