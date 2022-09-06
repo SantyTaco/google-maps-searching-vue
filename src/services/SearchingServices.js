@@ -2,7 +2,7 @@ import { sampleData } from "@/assets/mock-data/sample-data"
 
 export const getSearchingData = (inputValue) => {
     const searchingSampleData = sampleData;
-    const data = searchingSampleData.filter((item) => item.name.includes(inputValue));
+    const data = searchingSampleData.filter((item) => item.name.toLowerCase().includes(inputValue.toLowerCase()));
 
     return data;
 }

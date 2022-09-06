@@ -18,7 +18,7 @@
       </div>
     </div>
     <div v-show="enableButton" class="item-button">
-      <button id="item-button" class="right">Visit Website</button>
+      <button id="item-button" class="right" @click="handleIButtonOnClick">Visit Website</button>
     </div>
   </div>
 </template>
@@ -29,6 +29,13 @@ export default {
   methods: {
     handleItemOnClick() {
       this.$emit("item-onclick");
+    },
+    handleIButtonOnClick() {
+      if(this.item?.details?.website){
+        window.open(this.item?.details?.website);
+      } else {
+        alert('Website not found');
+      }
     },
   },
 };

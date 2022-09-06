@@ -53,7 +53,6 @@ export const sampleData = [{
 	},
 	images: [
 		'https://rainbowgram.files.wordpress.com/2015/03/fe8de-10787805_946218992085237_543029709_n.jpg?w=640',
-		'https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s640x640/e35/sh0.08/11255060_1622514958029454_1290485308_n.jpg'
 	]
 }, {
 	id: 4,

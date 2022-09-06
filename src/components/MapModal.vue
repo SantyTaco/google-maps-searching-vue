@@ -11,7 +11,6 @@
           </div>
         </li>
       </div>
-     
     </div>
   </div>
 </template>

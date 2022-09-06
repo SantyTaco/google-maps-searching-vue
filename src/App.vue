@@ -1,6 +1,40 @@
+<template>
+  <section class="map">
+    <div class="searching-section">
+      <div class="searching-component">
+        <img class="search-icon" src="./assets/icons/icon-search.svg" />
+        <input type="text" @input="handleInput" v-model="inputSearchValue" placeholder="Search..."/>
+      </div>
+      <div v-if="resultList.length > 0" class="searching-list-component">
+        <div class="searching-message">
+          <b>{{ resultMessage }}</b>
+        </div>
+        <div class="searching-list">
+          <li v-for="item in resultList" :key="item.id">
+            <SearchingItem
+              @item-onclick="handleItemOnClick(item)"
+              :item="item"
+              :enableButton="false"
+            />
+          </li>
+        </div>
+      </div>
+      <div v-if="showNotFoundMessage" class="searching-not-found-message">
+        <img v-bind:src="imgURL" />
+        <p>{{ resultMessage }}</p>
+      </div>
+    </div>
+    <div ref="mapDiv" style="width: 100%; height: 98vh" />
+    <MapModal
+      v-show="showModal"
+      @closed-modal="handleCloseModal"
+      :item="itemDataSelected"
+    />
+  </section>
+</template>
 <!-- eslint-disable no-undef -->
 <script>
-import { computed, onMounted, onUpdated, ref } from "@vue/runtime-core";
+import { computed, onMounted, ref } from "@vue/runtime-core";
 import { getLocation } from "./services/MapServices";
 import { Loader } from "@googlemaps/js-api-loader";
 import {
@@ -14,7 +48,6 @@ import SearchingItem from "@/components/SearchingItem.vue";
 export default {
   name: "App",
   components: {
-    // eslint-disable-next-line vue/no-unused-components
     SearchingItem,
     MapModal,
   },
@@ -28,6 +61,10 @@ export default {
     const mapMarker = ref(null);
     const showModal = ref(false);
     const itemDataSelected = ref({});
+    const showNotFoundMessage = ref(false);
+    const imgURL = ref(
+      "https://t4.ftcdn.net/jpg/01/68/08/09/240_F_168080987_nsGI5ILn8pBb42thQxdJNb4G7dXNjn5M.jpg"
+    );
 
     const { coords } = getLocation();
     const currentPosition = computed(() => ({
@@ -37,8 +74,6 @@ export default {
 
     onMounted(async () => {
       await loader.load();
-
-      // eslint-disable-next-line no-unused-vars
       const svgMarker = {
         path: "M5.49 0A5.496 5.496 0 0 0 0 5.49c0 2.08 1.412 4.261 2.596 5.724.97 1.197 2.54 2.768 2.886 2.797l.051.003c.37 0 2.002-1.69 2.88-2.786 1.17-1.461 2.567-3.644 2.567-5.738A5.496 5.496 0 0 0 5.49 0zm0 8.546a3.147 3.147 0 1 1-.001-6.293 3.147 3.147 0 0 1 0 6.293z",
         fillColor: "rgb(68, 127, 239)",
@@ -62,27 +97,18 @@ export default {
       });
     });
 
-    onUpdated(() => {
-      resultMessage.value = "";
-      if (inputSearchValue.value !== "") {
+    const handleInput = () => {
+      if(inputSearchValue.value) {
         const searchingDataResult = getSearchingData(inputSearchValue.value);
         resultList.value = searchingDataResult;
         resultMessage.value = getResultMessage(searchingDataResult);
+        showNotFoundMessage.value = searchingDataResult.length == 0;
       } else {
         resultList.value = [];
-      }
-    });
-
-    /*const handleInput = (value) => {
-      resultMessage.value = "";
-        console.log('Input value', value);
-        const searchingDataResult = getSearchingData(value);
-      resultList.value = searchingDataResult;
-      resultMessage.value = getResultMessage(searchingDataResult);
-    }*/
+      } 
+    }
 
     const handleItemOnClick = (item) => {
-      console.log('handleItemOnClick', item);
       const itemFormated = JSON.parse(JSON.stringify(item));
       map.value.setCenter({
         lat: itemFormated.location.lat,
@@ -109,36 +135,16 @@ export default {
       resultList,
       resultMessage,
       handleItemOnClick,
+      handleInput,
       showModal,
       handleCloseModal,
       itemDataSelected,
+      showNotFoundMessage,
+      imgURL,
     };
   },
 };
 </script>
-<template>
-  <section class="map">
-    <div class="searching-section">
-      <div class="searching-component">
-        <img class="search-icon" src="./assets/icons/icon-search.svg" />
-        <input type="text" v-model="inputSearchValue" placeholder="Search..." />
-      </div>
-      <div v-if="resultList.length > 0" class="searching-list-component">
-        <div class="searching-message">
-          <b ref="resultMessage">{{ resultMessage }}</b>
-        </div>
-        <div class="searching-list">
-          <li v-for="item in resultList" :key="item.id">
-            <SearchingItem @item-onclick="handleItemOnClick(item)" :item='item' :enableButton = false />
-          </li>
-        </div>
-      </div>
-    </div>
-    <div ref="mapDiv" style="width: 100%; height: 98vh" />
-    <p>{{itemData}}</p>
-    <MapModal v-show="showModal" @closed-modal="handleCloseModal" :item='itemDataSelected' />
-  </section>
-</template>
 <style>
 .map {
   width: 100%;
@@ -188,6 +194,22 @@ b {
   background: #ffffff;
   margin: 10px;
   color: black;
+}
+
+.searching-not-found-message {
+  width: 420px;
+  height: 300px;
+  background: #ffffff;
+  margin: 10px;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
 }
 .searching-message {
   width: 100%;
