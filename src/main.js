@@ -1,4 +1,4 @@
 import { createApp } from 'vue'
-import MapPage from './pages/Map.vue'
+import App from './App.vue'
 
-createApp(MapPage).mount('#app')
+createApp(App).mount('#app')

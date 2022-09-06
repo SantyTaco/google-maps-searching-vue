@@ -12,9 +12,9 @@
       </svg>
     </div>
     <div class="item-info">
-      <b id="item-title" class="item-title">{{ item.name }}</b>
+      <b id="item-title" class="item-title">{{ item?.name }}</b>
       <div id="item-location" class="item-location">
-        {{ item.location.lat }} {{ item.location.lon }}
+        {{ item?.location?.lat }} {{ item?.location?.lon }}
       </div>
     </div>
     <div v-show="enableButton" class="item-button">
@@ -39,7 +39,7 @@ export default {
   display: flex;
   background: #ffffff;
   padding: 10px;
-  border-bottom: 1px solid rgba(163, 160, 160, 0.99);
+  border-bottom: 1px solid rgba(188, 188, 188, 0.99);
 }
 .pin-section {
   display: flex;
@@ -57,7 +57,7 @@ export default {
   align-items: center;
 }
 .item-location {
-  color: gray;
+  color: rgb(155, 155, 155);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 13px;
   padding: 5px;
